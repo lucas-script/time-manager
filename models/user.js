@@ -18,9 +18,8 @@ var UserSchema = new Schema({
         default: 'regular',
         enum: ['regular', 'manager', 'admin']
     },
-    inactive: {
-        type: Boolean,
-        default: false
+    preferredWorking: {
+        type: Schema.Types.ObjectId, ref: 'PreferredWorking'
     }
 });
 
