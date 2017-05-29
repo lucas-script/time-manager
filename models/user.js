@@ -1,7 +1,3 @@
-/**
- * Created by lucas on 29/05/17.
- */
-
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt-nodejs');
@@ -16,10 +12,12 @@ var UserSchema = new Schema({
         type: String,
         required: true
     },
-    roles: [{
+    role: {
         type: String,
-        required: true
-    }],
+        required: true,
+        default: 'regular',
+        enum: ['regular', 'manager', 'admin']
+    },
     inactive: {
         type: Boolean,
         default: false
