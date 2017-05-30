@@ -18,8 +18,32 @@ var UserSchema = new Schema({
         default: 'regular',
         enum: ['regular', 'manager', 'admin']
     },
-    preferredWorking: {
-        type: Schema.Types.ObjectId, ref: 'PreferredWorking'
+    favoriteHours: {
+        enable: {
+            type: Boolean,
+            default: false
+        },
+        mon: {
+            startHour: Number, endHour: Number
+        },
+        tue: {
+            startHour: Number, endHour: Number
+        },
+        wed: {
+            startHour: Number, endHour: Number
+        },
+        thu: {
+            startHour: Number, endHour: Number
+        },
+        fri: {
+            startHour: Number, endHour: Number
+        },
+        sat: {
+            startHour: Number, endHour: Number
+        },
+        sun: {
+            startHour: Number, endHour: Number
+        }
     }
 });
 
@@ -39,7 +63,7 @@ UserSchema.pre('save', function (next) {
     });
 });
 
-// check password method
+// check password
 UserSchema.methods.checkPassword = function (p) {
     var user = this;
     return bcrypt.compareSync(p, user.password);

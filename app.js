@@ -12,6 +12,7 @@ var config = require('./config');
 var index = require('./routes/index');
 var register = require('./routes/register');
 var auth = require('./routes/auth');
+var tasks = require('./routes/tasks');
 
 var app = express();
 
@@ -30,9 +31,39 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+// non authenticated routes
 app.use('/', index);
 app.use('/api/v1/register', register);
 app.use('/api/v1/auth', auth);
+
+// routes authentication
+app.use(function (req, res, next) {
+
+    // access the token from query, body, header or cookie
+    var t = req.query.token || req.body.token || req.headers['x-access-token'] || req.cookies.token;
+    // secret
+    var s = config.secret;
+    // if there is an token
+    if (t) {
+        // verify the token
+        jwt.verify(t, s, function (err, d) {
+            if (err) {
+                res.status(err.status || 500);
+                return res.json({ errors: [err] });
+            }
+            // decoded token object
+            req.tokenObj = d;
+            next();
+        });
+    } else {
+        res.status(403);
+        return res.json({ message: 'Token not found int the request' });
+    }
+});
+
+// autheticated routes
+app.use('/api/v1/tasks', tasks);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
