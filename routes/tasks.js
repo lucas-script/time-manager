@@ -89,7 +89,7 @@ router.post('/', function (req, res, next) {
     t.save().then(function () {
 
         res.status(201);
-        return res.json({ data: { _id: t._id }});
+        return res.json({ data: t });
 
     }).catch(function (err) {
 
@@ -156,7 +156,7 @@ router.delete('/:id', function (req, res, next) {
     }
 
     q.exec().then(function (t) {
-        console.log(t);
+
         if (!t) {
             res.status(403);
             return res.json({ message: 'Forbidden' });
