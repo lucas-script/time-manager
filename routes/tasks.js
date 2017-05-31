@@ -34,6 +34,11 @@ router.get('/', function (req, res, next) {
 
     q.exec().then(function (tasks) {
 
+        if (!tasks) {
+            res.status(403);
+            return res.json({ message: 'Forbidden' });
+        }
+
         res.status(200);
         return res.json({ data: tasks });
 
@@ -60,6 +65,11 @@ router.get('/:id', function (req, res, next) {
     q.select('_id name date durationInMin user');
     
     q.exec().then(function (t) {
+
+        if (!t) {
+            res.status(403);
+            return res.json({ message: 'Forbidden' });
+        }
 
         res.status(200);
         return res.json({ data: t });
@@ -88,7 +98,6 @@ router.post('/', function (req, res, next) {
     });
 });
 
-// force error to test the catches
 router.put('/:id', function (req, res, next) {
 
     var q;
@@ -105,6 +114,12 @@ router.put('/:id', function (req, res, next) {
     q.select('_id name date durationInMin user');
     
     q.exec().then(function (t) {
+
+        if (!t) {
+            res.status(403);
+            return res.json({ message: 'Forbidden' });
+        }
+
         if (req.body.name) t.name = req.body.name;
         if (req.body.date) t.date = req.body.date;
         if (req.body.durationInMin) t.durationInMin = req.body.durationInMin;
@@ -112,14 +127,19 @@ router.put('/:id', function (req, res, next) {
         t.save().then(function () {
 
             res.status(200);
-            return res.json({ data: { _id: t._id }});
+            return res.json({ data: t });
 
-        }).catch(function (err) {
+        }).catch(function (err) { // save
 
             res.status(err.status || 500);
             return res.json(err);
         });
-    });
+
+    }).catch(function (err) { // exec
+
+        res.status(err.status || 500);
+        return res.json(err);
+    });;
 });
 
 router.delete('/:id', function (req, res, next) {
@@ -130,15 +150,20 @@ router.delete('/:id', function (req, res, next) {
     // access control
     // admin
     if (loggedUser.role === 'admin') {
-        q = Task.remove({ _id: id });
+        q = Task.findOneAndRemove({ _id: id });
     } else { // regular
-        q = Task.remove({ _id: id, user: loggedUser._id });
+        q = Task.findOneAndRemove({ _id: id, user: loggedUser._id });
     }
 
     q.exec().then(function (t) {
+        console.log(t);
+        if (!t) {
+            res.status(403);
+            return res.json({ message: 'Forbidden' });
+        }
 
         res.status(200);
-        return res.json({ _id: t._id });
+        return res.json({ message: 'Deleted' });
 
     }).catch(function (err) {
 
