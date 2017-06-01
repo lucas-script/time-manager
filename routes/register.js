@@ -1,22 +1,22 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express')
+var router = express.Router()
 
-var User = require('../models/user');
+var User = require('../models/user')
 
 router.post('/', function (req, res, next) {
 
-    var u = new User(req.body);
+    var u = new User(req.body)
 
     u.save().then(function () {
 
-        res.status(201);
-        return res.json({ data: { _id: u._id } });
+        res.status(201)
+        return res.json({ data: { _id: u._id } })
 
     }).catch(function (err) {
 
-        res.status(err.status || 500);
-        return res.json(err);
-    });
-});
+        res.status(err.status || 500)
+        return res.json(err)
+    })
+})
 
-module.exports = router;
+module.exports = router

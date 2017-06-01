@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var ObjectId = Schema.Types.ObjectId;
+var mongoose = require('mongoose')
+var Schema = mongoose.Schema
+var ObjectId = Schema.Types.ObjectId
 
 var TaskSchema = new Schema({
     user: {
@@ -19,6 +19,6 @@ var TaskSchema = new Schema({
         type: Number,
         required: true
     }
-});
+})
 
-module.exports = mongoose.model('Task', TaskSchema, 'tasks');
+module.exports = mongoose.model('Task', TaskSchema, 'tasks')

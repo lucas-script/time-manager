@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var bcrypt = require('bcrypt-nodejs');
+var mongoose = require('mongoose')
+var Schema = mongoose.Schema
+var bcrypt = require('bcrypt-nodejs')
 
 var UserSchema = new Schema({
     name: {
@@ -48,28 +48,28 @@ var UserSchema = new Schema({
             startHour: Number, endHour: Number
         }
     }
-});
+})
 
 // encrypting the password before save
 UserSchema.pre('save', function (next) {
-    var user = this;
+    var user = this
     // password was not modified
     if (!user.isModified('password')) {
-        return next();
+        return next()
     }
     // otherwise
     bcrypt.hash(user.password, null, null, function (err, hash) {
-        if (err) next(err);
+        if (err) next(err)
 
-        user.password = hash;
-        next();
-    });
-});
+        user.password = hash
+        next()
+    })
+})
 
 // check password
 UserSchema.methods.checkPassword = function (p) {
-    var user = this;
-    return bcrypt.compareSync(p, user.password);
+    var user = this
+    return bcrypt.compareSync(p, user.password)
 }
 
-module.exports = mongoose.model('User', UserSchema, 'users');
+module.exports = mongoose.model('User', UserSchema, 'users')
