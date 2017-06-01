@@ -59,7 +59,7 @@ app.use(function (req, res, next) {
         })
     } else {
         res.status(403)
-        return res.json({ message: 'Token not found int the request' })
+        return res.json({ message: 'Token not found in the request' })
     }
 })
 
