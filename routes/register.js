@@ -10,7 +10,7 @@ router.post('/', function (req, res, next) {
     u.save().then(function () {
 
         res.status(201)
-        return res.json({ data: { _id: u._id } })
+        return res.json({ data: u })
 
     }).catch(function (err) {
 
