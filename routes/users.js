@@ -39,7 +39,7 @@ router.get('/:id', function (req, res, next) {
 
     var id = req.params.id
     var q = User.findOne({ _id: id })
-    q.select('_id name email password role favoriteHours')
+    q.select('_id name email role favoriteHours')
 
     q.exec().then(function (u) {
 
@@ -70,6 +70,13 @@ router.post('/', function (req, res, next) {
 })
 
 router.put('/:id', function (req, res, next) {
+
+    var id = req.params.id
+    var changePass = req.body.changePass
+
+    if (!changePass) {
+        delete (req.body.password)
+    }
 
     var q = User.findOne({ _id: id })
     q.select('_id name email password role favoriteHours')

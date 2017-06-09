@@ -28,12 +28,29 @@ router.post('/', function (req, res, next) {
         var t = jwt.sign({ user: u }, config.secret, { expiresIn:'12h' })
 
         res.status(200)
-        return res.json({ token: t })
+        return res.json({ token: t, name: u.name, email: u.email })
 
     }).catch(function (err) {
 
         res.status(err.status || 500)
         return res.json(err)
+    })
+})
+
+router.post('/isTokenValid', function (req, res, next) {
+
+    var token = req.body.token
+    jwt.verify(token, s, function (err, d) {
+        if (err) {
+
+            res.status(200)
+            return res.json({ valid: false })
+        } else {
+
+            res.status(200)
+            return res.json({ valid: true })
+        }
+
     })
 })
 

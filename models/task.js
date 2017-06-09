@@ -18,6 +18,10 @@ var TaskSchema = new Schema({
     durationInMin: {
         type: Number,
         required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 })
 

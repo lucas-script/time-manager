@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
 var jwt = require('jsonwebtoken')
 var mongoose = require('mongoose')
+var cors = require('cors')
 
 var config = require('./config')
 
@@ -33,12 +34,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 // cors
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    next();
-});
+app.use(cors());
 
 // non authenticated routes
 app.use('/', index)
@@ -49,7 +45,7 @@ app.use('/api/v1/auth', auth)
 app.use(function (req, res, next) {
 
     // access the token from query, body, header or cookie
-    var t = req.query.token || req.body.token || req.headers['x-access-token'] || req.cookies.token
+    var t = req.query.token || req.body.token || req.headers['token'] || req.cookies.token
     // secret
     var s = config.secret
     // if there is an token

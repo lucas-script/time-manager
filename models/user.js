@@ -21,32 +21,17 @@ var UserSchema = new Schema({
         default: 'regular',
         enum: ['regular', 'manager', 'admin']
     },
-    favoriteHours: {
-        enable: {
-            type: Boolean,
-            default: false
-        },
-        mon: {
-            startHour: Number, endHour: Number
-        },
-        tue: {
-            startHour: Number, endHour: Number
-        },
-        wed: {
-            startHour: Number, endHour: Number
-        },
-        thu: {
-            startHour: Number, endHour: Number
-        },
-        fri: {
-            startHour: Number, endHour: Number
-        },
-        sat: {
-            startHour: Number, endHour: Number
-        },
-        sun: {
-            startHour: Number, endHour: Number
-        }
+    preferredHours: [{
+        date: { type: String },
+        hours: { type: Number }
+    }],
+    phIsEnable: {
+        type: Boolean,
+        default: false
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 })
 
