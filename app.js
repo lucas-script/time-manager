@@ -15,7 +15,7 @@ var register = require('./routes/register')
 var auth = require('./routes/auth')
 var tasks = require('./routes/tasks')
 var users = require('./routes/users')
-var workload = require('./routes/workloads')
+var workloads = require('./routes/workloads')
 var me = require('./routes/me')
 var reports = require('./routes/reports')
 
@@ -72,7 +72,7 @@ app.use(function (req, res, next) {
 // autheticated routes
 app.use('/api/v1/tasks', tasks)
 app.use('/api/v1/users', users)
-app.use('/api/v1/workloads', workload)
+app.use('/api/v1/workloads', workloads)
 app.use('/api/v1/me', me)
 app.use('/api/v1/reports', reports)
 

@@ -53,7 +53,7 @@ router.get('/', (req, res, next) => {
 
 
     if (loggedUser.role === 'regular') {
-        // admins can access all reports
+        // regular users can access only theirs own
         user = loggedUser._id
     }
 
