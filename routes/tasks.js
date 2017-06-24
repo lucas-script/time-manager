@@ -6,7 +6,7 @@ var Task = require('../models/task')
 var loggedUser
 
 // only regular users and admins can access
-router.use(function (req, res, next) {
+router.use((req, res, next) => {
 
     loggedUser = req.tokenObj.user
 
@@ -18,7 +18,7 @@ router.use(function (req, res, next) {
     }
 })
 
-router.get('/', function (req, res, next) {
+router.get('/', (req, res, next) => {
 
     var q
 
@@ -30,7 +30,26 @@ router.get('/', function (req, res, next) {
         q = Task.find({ user: loggedUser._id })
     }
 
+    q.populate('user')
     q.select('_id name date durationInMin user')
+
+    let sdt = req.query.sdate
+    let edt = req.query.edate
+
+    // filter start date and end date
+    if (sdt && edt) {
+        q.where('date').gte(sdt).lte(edt)
+    }
+
+    // filter only start date
+    if (sdt && !edt) {
+        q.where('date').gte(sdt)
+    }
+
+    // filter only end date
+    if (!sdt && edt) {
+        q.where('date').lte(edt)
+    }
 
     q.exec().then(function (tasks) {
 

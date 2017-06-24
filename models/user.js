@@ -3,36 +3,13 @@ var Schema = mongoose.Schema
 var bcrypt = require('bcrypt-nodejs')
 
 var UserSchema = new Schema({
-    name: {
-        type : String
-    },
-    email: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    role: {
-        type: String,
-        required: true,
-        default: 'regular',
-        enum: ['regular', 'manager', 'admin']
-    },
-    preferredHours: [{
-        date: { type: String },
-        hours: { type: Number }
-    }],
-    phIsEnable: {
-        type: Boolean,
-        default: false
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+    name: { type : String },
+    email: { type: String, unique: true, required: true },
+    password: { type: String, required: true },
+    role: { type: String, required: true, default: 'regular', enum: ['regular', 'manager', 'admin'] },
+    workload: { type: Number, default: false },
+    workloadEnable: { type: Boolean, default: false },
+    createdAt: { type: Date, default: Date.now }
 })
 
 // encrypting the password before save

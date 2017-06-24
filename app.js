@@ -15,6 +15,9 @@ var register = require('./routes/register')
 var auth = require('./routes/auth')
 var tasks = require('./routes/tasks')
 var users = require('./routes/users')
+var workload = require('./routes/workloads')
+var me = require('./routes/me')
+var reports = require('./routes/reports')
 
 var app = express()
 
@@ -69,6 +72,9 @@ app.use(function (req, res, next) {
 // autheticated routes
 app.use('/api/v1/tasks', tasks)
 app.use('/api/v1/users', users)
+app.use('/api/v1/workloads', workload)
+app.use('/api/v1/me', me)
+app.use('/api/v1/reports', reports)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

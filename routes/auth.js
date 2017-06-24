@@ -28,7 +28,7 @@ router.post('/', function (req, res, next) {
         var t = jwt.sign({ user: u }, config.secret, { expiresIn:'12h' })
 
         res.status(200)
-        return res.json({ token: t, name: u.name, email: u.email })
+        return res.json({ token: t, name: u.name, email: u.email, role: u.role })
 
     }).catch(function (err) {
 

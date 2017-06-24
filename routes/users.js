@@ -21,7 +21,7 @@ router.use(function (req, res, next) {
 router.get('/', function (req, res, next) {
 
     var q = User.find({})
-    q.select('_id name email password role favoriteHours')
+    q.select('_id name email password role workload workloadEnable')
 
     q.exec().then(function (users) {
 
@@ -39,7 +39,7 @@ router.get('/:id', function (req, res, next) {
 
     var id = req.params.id
     var q = User.findOne({ _id: id })
-    q.select('_id name email role favoriteHours')
+    q.select('_id name email role workload workloadEnable')
 
     q.exec().then(function (u) {
 
@@ -79,7 +79,7 @@ router.put('/:id', function (req, res, next) {
     }
 
     var q = User.findOne({ _id: id })
-    q.select('_id name email password role favoriteHours')
+    q.select('_id name email password role workload workloadEnable')
 
     q.exec().then(function (u) {
 
@@ -87,7 +87,8 @@ router.put('/:id', function (req, res, next) {
         if (req.body.email) u.email = req.body.email
         if (req.body.password) u.password = req.body.password
         if (req.body.role) u.role = req.body.role
-        if (req.body.favoriteHours) u.favoriteHours = req.body.favoriteHours
+        if (req.body.workload) u.workload = req.body.workload
+        if (req.body.workloadEnable) u.workloadEnable = req.body.workloadEnable
 
         u.save().then(function () {
 
