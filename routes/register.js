@@ -5,6 +5,9 @@ var User = require('../models/user')
 
 router.post('/', (req, res, next) => {
 
+    // block admin/manager by post
+    delete(req.body.role)
+
     var u = new User(req.body)
 
     u.save().then(function () {
