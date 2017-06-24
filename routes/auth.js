@@ -5,13 +5,13 @@ var config = require('../config')
 
 var User = require('../models/user')
 
-router.post('/', function (req, res, next) {
+router.post('/', (req, res, next) => {
 
     var email = req.body.email
     var pass = req.body.password
 
     var q = User.findOne({ email: email })
-    q.exec().then(function (u) {
+    q.exec().then((u) => {
 
         if (!u) {
             res.status(401)
@@ -30,17 +30,17 @@ router.post('/', function (req, res, next) {
         res.status(200)
         return res.json({ token: t, name: u.name, email: u.email, role: u.role })
 
-    }).catch(function (err) {
+    }).catch((err) => {
 
         res.status(err.status || 500)
         return res.json(err)
     })
 })
 
-router.post('/isTokenValid', function (req, res, next) {
+router.post('/isTokenValid', (req, res, next) => {
 
     var token = req.body.token
-    jwt.verify(token, s, function (err, d) {
+    jwt.verify(token, s, (err, d) => {
         if (err) {
 
             res.status(200)

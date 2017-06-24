@@ -45,7 +45,7 @@ app.use('/api/v1/register', register)
 app.use('/api/v1/auth', auth)
 
 // routes authentication
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
 
     // access the token from query, body, header or cookie
     var t = req.query.token || req.body.token || req.headers['token'] || req.cookies.token
@@ -54,7 +54,7 @@ app.use(function (req, res, next) {
     // if there is an token
     if (t) {
         // verify the token
-        jwt.verify(t, s, function (err, d) {
+        jwt.verify(t, s, (err, d) => {
             if (err) {
                 res.status(err.status || 500)
                 return res.json(err)
@@ -77,21 +77,21 @@ app.use('/api/v1/me', me)
 app.use('/api/v1/reports', reports)
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   var err = new Error('Not Found')
   err.status = 404
   next(err)
 })
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
 
   // render the error page
   res.status(err.status || 500)
-  res.render('error')
+  res.json(err)
 })
 
 module.exports = app

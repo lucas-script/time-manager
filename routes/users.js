@@ -6,7 +6,7 @@ var User = require('../models/user')
 var loggedUser
 
 // only managers and admins can acccess
-router.use(function (req, res, next) {
+router.use((req, res, next) => {
 
     loggedUser = req.tokenObj.user
 
@@ -18,58 +18,58 @@ router.use(function (req, res, next) {
     }
 })
 
-router.get('/', function (req, res, next) {
+router.get('/', (req, res, next) => {
 
     var q = User.find({})
     q.select('_id name email password role workload workloadEnable')
 
-    q.exec().then(function (users) {
+    q.exec().then((users) => {
 
         res.status(200)
         return res.json({ data: users })
 
-    }).catch(function (err) {
+    }).catch((err) => {
 
         res.status(err.status || 500)
         return res.json(err)
     })
 })
 
-router.get('/:id', function (req, res, next) {
+router.get('/:id', (req, res, next) => {
 
     var id = req.params.id
     var q = User.findOne({ _id: id })
     q.select('_id name email role workload workloadEnable')
 
-    q.exec().then(function (u) {
+    q.exec().then((u) => {
 
         res.status(200)
         return res.json({ data: u })
 
-    }).catch(function (err) {
+    }).catch((err) => {
 
         res.status(err.status || 500)
         return res.json(err)
     })
 })
 
-router.post('/', function (req, res, next) {
+router.post('/', (req, res, next) => {
 
     var u = new User(req.body)
 
-    u.save().then(function () {
+    u.save().then(() => {
 
         res.status(201)
         return res.json({ data: u })
 
-    }).catch(function (err) {
+    }).catch((err) => {
 
         res.status(err.status || 500)
         return res.json(err)
     })
 })
 
-router.put('/:id', function (req, res, next) {
+router.put('/:id', (req, res, next) => {
 
     var id = req.params.id
     var changePass = req.body.changePass
@@ -81,7 +81,7 @@ router.put('/:id', function (req, res, next) {
     var q = User.findOne({ _id: id })
     q.select('_id name email password role workload workloadEnable')
 
-    q.exec().then(function (u) {
+    q.exec().then((u) => {
 
         if (req.body.name) u.name = req.body.name
         if (req.body.email) u.email = req.body.email
@@ -90,34 +90,34 @@ router.put('/:id', function (req, res, next) {
         if (req.body.workload) u.workload = req.body.workload
         if (req.body.workloadEnable) u.workloadEnable = req.body.workloadEnable
 
-        u.save().then(function () {
+        u.save().then(() => {
 
             res.status(200)
             return res.json({ data: u })
 
-        }).catch(function (err) { // save
+        }).catch((err) => { // save
 
             res.status(err.status || 500)
             return res.json(err)
         })
-    }).catch(function (err) { // exec
+    }).catch((err) => { // exec
 
         res.status(err.status || 500)
         return res.json(err)
     })
 })
 
-router.delete('/:id', function (req, res, next) {
+router.delete('/:id', (req, res, next) => {
 
     var id = req. params.id
     var q = User.findOneAndRemove({ _id: id })
 
-    q.exec().then(function (u) {
+    q.exec().then((u) => {
 
         res.status(200)
         return res.json({ message: 'Deleted' })
 
-    }).catch(function (err) {
+    }).catch((err) => {
 
         res.status(err.status || 500)
         return res.json(err)

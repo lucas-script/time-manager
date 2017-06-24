@@ -3,9 +3,9 @@ var express = require('express')
 var User = require('../models/user')
 var Task = require('../models/task')
 
-const router = express.Router()
+var router = express.Router()
 
-let loggedUser
+var loggedUser
 
 router.use((req, res, next) => {
 
@@ -22,7 +22,7 @@ router.use((req, res, next) => {
 
 router.get('/', (req, res, next) => {
 
-    let q
+    var q
 
     if (loggedUser.role === 'admin') {
         // admin user
@@ -47,7 +47,7 @@ router.get('/', (req, res, next) => {
 
 router.get('/tasksSum', (req, res, next) => {
 
-    let aggregateOpts = [
+    var aggregateOpts = [
         {
             $group: {
                 _id: { date: "$date", user: "$user" },
@@ -56,7 +56,7 @@ router.get('/tasksSum', (req, res, next) => {
         }
     ]
 
-    let q = Task.aggregate(aggregateOpts)
+    var q = Task.aggregate(aggregateOpts)
     q.exec().then(ts => {
 
         res.status(200)

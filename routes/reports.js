@@ -1,13 +1,13 @@
-const express = require('express')
-const router = express.Router()
-const mongoose = require('mongoose')
-const ObjectId = mongoose.Types.ObjectId
-const moment = require('moment')
+var express = require('express')
+var router = express.Router()
+var mongoose = require('mongoose')
+var ObjectId = mongoose.Types.ObjectId
+var moment = require('moment')
 
-const User = require('../models/user')
-const Task = require('../models/task')
+var User = require('../models/user')
+var Task = require('../models/task')
 
-let loggedUser
+var loggedUser
 
 router.use((req, res, next) => {
 
@@ -24,7 +24,7 @@ router.use((req, res, next) => {
 
 router.get('/users', (req, res, next) => {
 
-    let q
+    var q
     if (loggedUser.role === 'admin') {
         q = User.find({})
     } else {
@@ -47,9 +47,9 @@ router.get('/users', (req, res, next) => {
 
 router.get('/', (req, res, next) => {
 
-    let user = req.query.user
-    let sdate = req.query.sdate
-    let edate = req.query.edate
+    var user = req.query.user
+    var sdate = req.query.sdate
+    var edate = req.query.edate
 
 
     if (loggedUser.role === 'regular') {
@@ -57,10 +57,10 @@ router.get('/', (req, res, next) => {
         user = loggedUser._id
     }
 
-    let sdateISO = moment(sdate).toISOString()
-    let edateISO = moment(edate).toISOString()
+    var sdateISO = moment(sdate).toISOString()
+    var edateISO = moment(edate).toISOString()
 
-    let aggregateOpts = [
+    var aggregateOpts = [
         {
             $match: {
                 user: ObjectId(user),
@@ -76,7 +76,7 @@ router.get('/', (req, res, next) => {
         }
     ]
 
-    let q = Task.aggregate(aggregateOpts)
+    var q = Task.aggregate(aggregateOpts)
 
     q.exec().then(ts => {
 

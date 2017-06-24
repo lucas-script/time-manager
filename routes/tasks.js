@@ -51,7 +51,7 @@ router.get('/', (req, res, next) => {
         q.where('date').lte(edt)
     }
 
-    q.exec().then(function (tasks) {
+    q.exec().then((tasks) => {
 
         if (!tasks) {
             res.status(403)
@@ -61,14 +61,14 @@ router.get('/', (req, res, next) => {
         res.status(200)
         return res.json({ data: tasks })
 
-    }).catch(function (err) {
+    }).catch((err) => {
 
         res.status(err.status || 500)
         return res.json(err)
     })
 })
 
-router.get('/:id', function (req, res, next) {
+router.get('/:id', (req, res, next) => {
 
     var q
     var id = req.params.id
@@ -83,7 +83,7 @@ router.get('/:id', function (req, res, next) {
 
     q.select('_id name date durationInMin user')
     
-    q.exec().then(function (t) {
+    q.exec().then((t) => {
 
         if (!t) {
             res.status(403)
@@ -93,31 +93,31 @@ router.get('/:id', function (req, res, next) {
         res.status(200)
         return res.json({ data: t })
 
-    }).catch(function (err) {
+    }).catch((err) => {
 
         res.status(err.status || 500)
         return res.json(err)
     })
 })
 
-router.post('/', function (req, res, next) {
+router.post('/', (req, res, next) => {
 
     var t = new Task(req.body)
     t.user = loggedUser._id
 
-    t.save().then(function () {
+    t.save().then(() => {
 
         res.status(201)
         return res.json({ data: t })
 
-    }).catch(function (err) {
+    }).catch((err) => {
 
         res.status(err.status || 500)
         return res.json(err)
     })
 })
 
-router.put('/:id', function (req, res, next) {
+router.put('/:id', (req, res, next) => {
 
     var q
     var id = req.params.id
@@ -132,7 +132,7 @@ router.put('/:id', function (req, res, next) {
 
     q.select('_id name date durationInMin user')
     
-    q.exec().then(function (t) {
+    q.exec().then((t) => {
 
         if (!t) {
             res.status(403)
@@ -143,25 +143,25 @@ router.put('/:id', function (req, res, next) {
         if (req.body.date) t.date = req.body.date
         if (req.body.durationInMin) t.durationInMin = req.body.durationInMin
 
-        t.save().then(function () {
+        t.save().then(() => {
 
             res.status(200)
             return res.json({ data: t })
 
-        }).catch(function (err) { // save
+        }).catch((err) => { // save
 
             res.status(err.status || 500)
             return res.json(err)
         })
 
-    }).catch(function (err) { // exec
+    }).catch((err) => { // exec
 
         res.status(err.status || 500)
         return res.json(err)
     })
 })
 
-router.delete('/:id', function (req, res, next) {
+router.delete('/:id', (req, res, next) => {
 
     var q
     var id = req.params.id
@@ -174,7 +174,7 @@ router.delete('/:id', function (req, res, next) {
         q = Task.findOneAndRemove({ _id: id, user: loggedUser._id })
     }
 
-    q.exec().then(function (t) {
+    q.exec().then((t) => {
 
         if (!t) {
             res.status(403)
@@ -184,7 +184,7 @@ router.delete('/:id', function (req, res, next) {
         res.status(200)
         return res.json({ message: 'Deleted' })
 
-    }).catch(function (err) {
+    }).catch((err) => {
 
         res.status(err.status || 500)
         return res.json(err)
