@@ -48,19 +48,19 @@ app.use('/api/v1/auth', auth)
 app.use((req, res, next) => {
 
     // access the token from query, body, header or cookie
-    var t = req.query.token || req.body.token || req.headers['token'] || req.cookies.token
+    var token = req.query.token || req.body.token || req.headers['token'] || req.cookies.token
     // secret
-    var s = config.secret
+    var secret = config.secret
     // if there is an token
-    if (t) {
+    if (token) {
         // verify the token
-        jwt.verify(t, s, (err, d) => {
+        jwt.verify(token, secret, (err, decoded) => {
             if (err) {
                 res.status(err.status || 500)
                 return res.json(err)
             }
             // decoded token object
-            req.tokenObj = d
+            req.tokenObj = decoded
             next()
         })
     } else {
