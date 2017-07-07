@@ -14,7 +14,7 @@ Main Technologies.
     - secret: 'asdf' (your secret to encrypt user passwords)
   - Run the commands
     - npm install (install dependencies)
-    - npm run dev (run de api on port 3000)
+    - npm run dev (runs the api on port 3000)
 
 * [Live sample](https://time-manager-1.herokuapp.com) - Time-manager at heroku
 * lucas.script@gmail.com
