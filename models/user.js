@@ -29,9 +29,9 @@ UserSchema.pre('save', function (next) {
 })
 
 // check password
-UserSchema.methods.checkPassword = function (p) {
+UserSchema.methods.checkPassword = function (password) {
     var user = this
-    return bcrypt.compareSync(p, user.password)
+    return bcrypt.compareSync(password, user.password)
 }
 
 module.exports = mongoose.model('User', UserSchema, 'users')

@@ -22,19 +22,19 @@ router.use((req, res, next) => {
 
 router.get('/', (req, res, next) => {
 
-    var q
+    var query
 
     if (loggedUser.role === 'admin') {
         // admin user
-        q = User.find({ workloadEnable: true })
+        query = User.find({ workloadEnable: true })
     } else {
         // regular user
-        q = User.find({ _id: loggedUser._id, workloadEnable: true })
+        query = User.find({ _id: loggedUser._id, workloadEnable: true })
     }
 
-    q.select('_id workload')
+    query.select('_id workload')
 
-    q.exec().then((workloads) => {
+    query.exec().then((workloads) => {
 
         res.status(200)
         return res.json({ data: workloads })
@@ -56,11 +56,11 @@ router.get('/tasksSum', (req, res, next) => {
         }
     ]
 
-    var q = Task.aggregate(aggregateOpts)
-    q.exec().then(ts => {
+    var query = Task.aggregate(aggregateOpts)
+    query.exec().then((tasks) => {
 
         res.status(200)
-        return res.json({ data: ts })
+        return res.json({ data: tasks })
     }).catch(err => {
 
         res.status(err.status || 500)

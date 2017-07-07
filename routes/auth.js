@@ -10,25 +10,24 @@ router.post('/', (req, res, next) => {
     var email = req.body.email
     var pass = req.body.password
 
-    var q = User.findOne({ email: email })
-    q.exec().then((u) => {
+    var query = User.findOne({ email: email })
+    query.exec().then((user) => {
 
-        if (!u) {
+        if (!user) {
             res.status(401)
             return res.json({ message: 'User not found' })
         }
 
-        var isCorrectPass = u.checkPassword(pass)
+        var isCorrectPass = user.checkPassword(pass)
         if (!isCorrectPass) {
             res.status(401)
             return res.json({ message: 'Wrong password' })
         }
 
-        // token
-        var t = jwt.sign({ user: u }, config.secret, { expiresIn:'12h' })
+        var token = jwt.sign({ user: user }, config.secret, { expiresIn:'12h' })
 
         res.status(200)
-        return res.json({ token: t, name: u.name, email: u.email, role: u.role })
+        return res.json({ token: token, name: user.name, email: user.email, role: user.role })
 
     }).catch((err) => {
 
@@ -40,7 +39,7 @@ router.post('/', (req, res, next) => {
 router.post('/isTokenValid', (req, res, next) => {
 
     var token = req.body.token
-    jwt.verify(token, s, (err, d) => {
+    jwt.verify(token, config.secret, (err, decoded) => {
         if (err) {
 
             res.status(200)

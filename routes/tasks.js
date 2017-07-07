@@ -20,38 +20,40 @@ router.use((req, res, next) => {
 
 router.get('/', (req, res, next) => {
 
-    var q
+    var query
 
     // access control
     // admin
     if (loggedUser.role === 'admin') {
-        q = Task.find({})
+        query = Task.find({})
     } else { // regular
-        q = Task.find({ user: loggedUser._id })
+        query = Task.find({ user: loggedUser._id })
     }
 
-    q.populate('user')
-    q.select('_id name date durationInMin user')
+    query.populate('user')
+    query.select('_id name date durationInMin user')
 
-    let sdt = req.query.sdate
-    let edt = req.query.edate
+    // start date
+    let sdate = req.query.sdate
+    // end date
+    let edate = req.query.edate
 
     // filter start date and end date
-    if (sdt && edt) {
-        q.where('date').gte(sdt).lte(edt)
+    if (sdate && edate) {
+        query.where('date').gte(sdate).lte(edate)
     }
 
     // filter only start date
-    if (sdt && !edt) {
-        q.where('date').gte(sdt)
+    if (sdate && !edate) {
+        query.where('date').gte(sdate)
     }
 
     // filter only end date
-    if (!sdt && edt) {
-        q.where('date').lte(edt)
+    if (!sdate && edate) {
+        query.where('date').lte(edt)
     }
 
-    q.exec().then((tasks) => {
+    query.exec().then((tasks) => {
 
         if (!tasks) {
             res.status(403)
@@ -70,28 +72,28 @@ router.get('/', (req, res, next) => {
 
 router.get('/:id', (req, res, next) => {
 
-    var q
+    var query
     var id = req.params.id
 
     // access control
     // admin
     if (loggedUser.role === 'admin') {
-        q = Task.findOne({ _id: id })
+        query = Task.findOne({ _id: id })
     } else { // regular
-        q = Task.findOne({ _id: id, user: loggedUser._id })
+        query = Task.findOne({ _id: id, user: loggedUser._id })
     }
 
-    q.select('_id name date durationInMin user')
+    query.select('_id name date durationInMin user')
     
-    q.exec().then((t) => {
+    query.exec().then((task) => {
 
-        if (!t) {
+        if (!task) {
             res.status(403)
             return res.json({ message: 'Forbidden' })
         }
 
         res.status(200)
-        return res.json({ data: t })
+        return res.json({ data: task })
 
     }).catch((err) => {
 
@@ -102,13 +104,13 @@ router.get('/:id', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
 
-    var t = new Task(req.body)
-    t.user = loggedUser._id
+    var task = new Task(req.body)
+    task.user = loggedUser._id
 
-    t.save().then(() => {
+    task.save().then(() => {
 
         res.status(201)
-        return res.json({ data: t })
+        return res.json({ data: task })
 
     }).catch((err) => {
 
@@ -119,34 +121,34 @@ router.post('/', (req, res, next) => {
 
 router.put('/:id', (req, res, next) => {
 
-    var q
+    var query
     var id = req.params.id
 
     // access control
     // admin
     if (loggedUser.role === 'admin') {
-        q = Task.findOne({ _id: id })
+        query = Task.findOne({ _id: id })
     } else { // regular
-        q = Task.findOne({ _id: id, user: loggedUser._id })
+        query = Task.findOne({ _id: id, user: loggedUser._id })
     }
 
-    q.select('_id name date durationInMin user')
+    query.select('_id name date durationInMin user')
     
-    q.exec().then((t) => {
+    query.exec().then((task) => {
 
-        if (!t) {
+        if (!task) {
             res.status(403)
             return res.json({ message: 'Forbidden' })
         }
 
-        if (req.body.name) t.name = req.body.name
-        if (req.body.date) t.date = req.body.date
-        if (req.body.durationInMin) t.durationInMin = req.body.durationInMin
+        if (req.body.name) task.name = req.body.name
+        if (req.body.date) task.date = req.body.date
+        if (req.body.durationInMin) task.durationInMin = req.body.durationInMin
 
-        t.save().then(() => {
+        task.save().then(() => {
 
             res.status(200)
-            return res.json({ data: t })
+            return res.json({ data: task })
 
         }).catch((err) => { // save
 
@@ -163,20 +165,20 @@ router.put('/:id', (req, res, next) => {
 
 router.delete('/:id', (req, res, next) => {
 
-    var q
+    var query
     var id = req.params.id
 
     // access control
     // admin
     if (loggedUser.role === 'admin') {
-        q = Task.findOneAndRemove({ _id: id })
+        query = Task.findOneAndRemove({ _id: id })
     } else { // regular
-        q = Task.findOneAndRemove({ _id: id, user: loggedUser._id })
+        query = Task.findOneAndRemove({ _id: id, user: loggedUser._id })
     }
 
-    q.exec().then((t) => {
+    query.exec().then((task) => {
 
-        if (!t) {
+        if (!task) {
             res.status(403)
             return res.json({ message: 'Forbidden' })
         }

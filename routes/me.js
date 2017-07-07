@@ -12,13 +12,13 @@ router.use((req, res, next) => {
 
 router.get('/', (req, res, next) => {
 
-    var q = User.findOne({ _id: loggedUser._id })
-    q.select('_id name email password role workload workloadEnable')
+    var query = User.findOne({ _id: loggedUser._id })
+    query.select('_id name email password role workload workloadEnable')
 
-    q.exec().then((u) => {
+    query.exec().then((user) => {
 
         res.status(200)
-        return res.json({ data: u })
+        return res.json({ data: user })
 
     }).catch((err) => {
 
@@ -36,21 +36,21 @@ router.put('/', (req, res, next) => {
         delete (req.body.password)
     }
 
-    var q = User.findOne({ _id: loggedUser._id })
-    q.select('_id name email password role workload workloadEnable')
+    var query = User.findOne({ _id: loggedUser._id })
+    query.select('_id name email password role workload workloadEnable')
 
-    q.exec().then((u) => {
+    query.exec().then((user) => {
 
-        if (req.body.name) u.name = req.body.name
-        if (req.body.email) u.email = req.body.email
-        if (req.body.password) u.password = req.body.password
-        if (req.body.workload) u.workload = req.body.workload
-        u.workloadEnable = req.body.workloadEnable
+        if (req.body.name) user.name = req.body.name
+        if (req.body.email) user.email = req.body.email
+        if (req.body.password) user.password = req.body.password
+        if (req.body.workload) user.workload = req.body.workload
+        user.workloadEnable = req.body.workloadEnable
 
-        u.save().then(() => {
+        user.save().then(() => {
 
             res.status(200)
-            return res.json({ data: u })
+            return res.json({ data: user })
 
         }).catch((err) => { // save
 

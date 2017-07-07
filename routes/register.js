@@ -8,12 +8,12 @@ router.post('/', (req, res, next) => {
     // block admin/manager by post
     delete(req.body.role)
 
-    var u = new User(req.body)
+    var user = new User(req.body)
 
-    u.save().then(function () {
+    user.save().then(function () {
 
         res.status(201)
-        return res.json({ data: u })
+        return res.json({ data: user })
 
     }).catch(function (err) {
 

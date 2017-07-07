@@ -24,16 +24,16 @@ router.use((req, res, next) => {
 
 router.get('/users', (req, res, next) => {
 
-    var q
+    var query
     if (loggedUser.role === 'admin') {
-        q = User.find({})
+        query = User.find({})
     } else {
-        q = User.find({ _id: loggedUser._id })
+        query = User.find({ _id: loggedUser._id })
     }
 
-    q.select('_id name email password role workload workloadEnable')
+    query.select('_id name email password role workload workloadEnable')
 
-    q.exec().then(function (users) {
+    query.exec().then(function (users) {
 
         res.status(200)
         return res.json({ data: users })
@@ -48,18 +48,21 @@ router.get('/users', (req, res, next) => {
 router.get('/', (req, res, next) => {
 
     var user = req.query.user
+    // start date
     var sdate = req.query.sdate
+    // end date
     var edate = req.query.edate
-
 
     if (loggedUser.role === 'regular') {
         // regular users can access only theirs own
         user = loggedUser._id
     }
 
+    // formating dates
     var sdateISO = moment(sdate).toISOString()
     var edateISO = moment(edate).toISOString()
 
+    // mongoose aggregate options
     var aggregateOpts = [
         {
             $match: {
@@ -76,12 +79,12 @@ router.get('/', (req, res, next) => {
         }
     ]
 
-    var q = Task.aggregate(aggregateOpts)
+    var query = Task.aggregate(aggregateOpts)
 
-    q.exec().then(ts => {
+    query.exec().then((tasks) => {
 
         res.status(200)
-        return res.json({ data: ts })
+        return res.json({ data: tasks })
     }).catch(err=> {
 
         res.status(err.status || 500)
