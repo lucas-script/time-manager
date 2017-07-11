@@ -21,6 +21,9 @@ var reports = require('./routes/reports')
 
 var app = express()
 
+// add socketio to app
+app.io = require('socket.io')()
+
 // connecting to database
 mongoose.connect(config.dataBaseUrl)
 
@@ -37,7 +40,13 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 // cors
-app.use(cors());
+app.use(cors())
+
+// binds the socket.io to req so we can use in our routes
+app.use((req, res, next) => {
+    req.io = app.io
+    next()
+})
 
 // non authenticated routes
 app.use('/', index)

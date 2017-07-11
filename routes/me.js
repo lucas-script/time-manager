@@ -48,6 +48,9 @@ router.put('/', (req, res, next) => {
         user.workloadEnable = req.body.workloadEnable
 
         user.save().then(() => {
+            // when we update our profile
+            // emit event a event to frontend
+            req.io.emit('profileUpdated')
 
             res.status(200)
             return res.json({ data: user })
