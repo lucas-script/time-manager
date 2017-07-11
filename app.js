@@ -18,6 +18,7 @@ var users = require('./routes/users')
 var workloads = require('./routes/workloads')
 var me = require('./routes/me')
 var reports = require('./routes/reports')
+var projects = require('./routes/projects')
 
 var app = express()
 
@@ -84,6 +85,7 @@ app.use('/api/v1/users', users)
 app.use('/api/v1/workloads', workloads)
 app.use('/api/v1/me', me)
 app.use('/api/v1/reports', reports)
+app.use('/api/v1/projects', projects)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

@@ -24,14 +24,18 @@ router.get('/', (req, res, next) => {
 
     // access control
     // admin
-    if (loggedUser.role === 'admin') {
+    var project = req.query.project
+    if (project) {
+        query = Task.find({ project: project })
+    } else if (loggedUser.role === 'admin') {
         query = Task.find({})
     } else { // regular
         query = Task.find({ user: loggedUser._id })
     }
 
     query.populate('user')
-    query.select('_id name date durationInMin user')
+    query.populate('project')
+    query.select('_id name date durationInMin user project')
 
     // start date
     let sdate = req.query.sdate
@@ -83,7 +87,7 @@ router.get('/:id', (req, res, next) => {
         query = Task.findOne({ _id: id, user: loggedUser._id })
     }
 
-    query.select('_id name date durationInMin user')
+    query.select('_id name date durationInMin user project')
     
     query.exec().then((task) => {
 
@@ -103,6 +107,8 @@ router.get('/:id', (req, res, next) => {
 })
 
 router.post('/', (req, res, next) => {
+
+    console.log(req.body)
 
     var task = new Task(req.body)
     task.user = loggedUser._id
@@ -132,7 +138,7 @@ router.put('/:id', (req, res, next) => {
         query = Task.findOne({ _id: id, user: loggedUser._id })
     }
 
-    query.select('_id name date durationInMin user')
+    query.select('_id name date durationInMin user project')
     
     query.exec().then((task) => {
 
@@ -144,6 +150,7 @@ router.put('/:id', (req, res, next) => {
         if (req.body.name) task.name = req.body.name
         if (req.body.date) task.date = req.body.date
         if (req.body.durationInMin) task.durationInMin = req.body.durationInMin
+        if (req.body.project) task.project = req.body.project
 
         task.save().then(() => {
 

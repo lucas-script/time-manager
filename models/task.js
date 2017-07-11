@@ -4,6 +4,7 @@ var ObjectId = Schema.Types.ObjectId
 
 var TaskSchema = new Schema({
     user: { type: ObjectId, ref: 'User' },
+    project: { type: ObjectId, ref: 'Project' },
     name: { type: String, required: true },
     date: { type: Date, required: true },
     durationInMin: { type: Number, required: true },
